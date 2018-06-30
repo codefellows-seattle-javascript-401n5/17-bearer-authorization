@@ -65,6 +65,8 @@ export default (req, res, next) => {
     }
     if(authHeader.match(/bearer/i)) {
       let token = authHeader.replace(/bearer\s+/i, '');
+      console.log('TOKEN IS HERE', token);
+      
       authorize(token);
     }
   }

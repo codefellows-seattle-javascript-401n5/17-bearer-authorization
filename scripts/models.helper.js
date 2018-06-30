@@ -37,14 +37,17 @@ export default {
   },
 
   beforeAll: done => {
+    console.log('before all console');
+    
     mockgoose.prepareStorage().then(() => {
-      mongoose.connect('mongodb://127.0.0.1/coffee').then(() => {
+      mongoose.connect('mongodb://localhost/lab_17').then(() => {
         done();
       });
     });
   },
 
   afterEach: done => {
+    console.log('after each done');
     mockgoose.helper.reset().then(done);
   },
 };

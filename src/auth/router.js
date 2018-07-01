@@ -61,6 +61,9 @@ authRouter.get('/api/v1/:model/:id', auth, (req, res, next) => {
       req.model.findById(req.params.id)
         // .populate('userID')
         .then(data => {
+          if(data === null) {
+            next(404);
+          }
           if(JSON.stringify(req.id) === JSON.stringify(data.userID)) {
             console.log(data);
             sendJSON(res, data);
@@ -69,7 +72,9 @@ authRouter.get('/api/v1/:model/:id', auth, (req, res, next) => {
             next(401);
           }
         })
-        .catch(next);
+        .catch(() => {
+          next();
+        });
     }
     else {
       next(404);
@@ -105,7 +110,7 @@ authRouter.put('/api/v1/:model/:id', auth, (req, res, next) => {
       .then(data => {
         if(JSON.stringify(req.id) === JSON.stringify(data.userID)) {
           req.model.findByIdAndUpdate(req.params.id, req.body, {new:true})
-            .then(() => {
+            .then(data => {
               sendJSON(res, data);
             })
             .catch(next);
@@ -114,10 +119,12 @@ authRouter.put('/api/v1/:model/:id', auth, (req, res, next) => {
           next(401);
         }
       })
-      .catch(next);
+      .catch(() => {
+        next();
+      });
   }
   else {
-    next(404);
+    next(401);
   }
 
 });
